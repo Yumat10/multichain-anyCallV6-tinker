@@ -11,6 +11,7 @@ import { HardhatUserConfig } from "hardhat/types"
 
 const RINKEBY_RPC_URL = process.env.RINKEBY_RPC_URL || "https://eth-rinkeby"
 const PRIVATE_KEY = process.env.PRIVATE_KEY || "0xkey"
+const FANTOM_MNEMONIC = process.env.FANTOM_MNEMONIC || "mnemonic"
 
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "key"
 
@@ -18,7 +19,13 @@ const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY || "key"
 
 /** @type import('hardhat/config').HardhatUserConfig */
 const config: HardhatUserConfig = {
-    solidity: "0.8.9",
+    solidity: {
+        compilers: [
+            {
+                version: "0.8.10",
+            },
+        ],
+    },
     defaultNetwork: "hardhat",
     networks: {
         hardhat: {
@@ -31,6 +38,14 @@ const config: HardhatUserConfig = {
             chainId: 4,
             url: RINKEBY_RPC_URL,
             accounts: [PRIVATE_KEY],
+        },
+        fantomtest: {
+            chainId: 4002,
+            url: "https://rpc.testnet.fantom.network",
+            accounts: { mnemonic: FANTOM_MNEMONIC },
+            live: false,
+            saveDeployments: true,
+            gasMultiplier: 2,
         },
     },
     namedAccounts: {
