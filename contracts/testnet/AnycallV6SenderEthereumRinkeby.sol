@@ -9,6 +9,18 @@ interface CallProxy {
         uint256 _toChainID,
         uint256 _flags
     ) external;
+
+    function executor() external view returns (address);
+}
+
+interface IAnycallExecutor {
+    function context()
+        external
+        returns (
+            address from,
+            uint256 fromChainID,
+            uint256 nonce
+        );
 }
 
 contract AnycallV6SenderEthereumRinkeby {
@@ -23,6 +35,15 @@ contract AnycallV6SenderEthereumRinkeby {
     uint256 public constant TEMP = 51;
 
     event NewMsgRequest(string msg);
+    event AnycallRequest(
+        address indexed anycallContract,
+        address indexed _to,
+        bytes _data,
+        address _fallback,
+        uint256 _toChainID,
+        uint256 _flags
+    );
+    event Fallbackmsg(string msg);
 
     constructor(
         address _anycall_contract_rinkeby,
@@ -40,6 +61,15 @@ contract AnycallV6SenderEthereumRinkeby {
 
         CallProxy callProxy = CallProxy(ANYCALL_CONTRACT_RINKEBY);
 
+        emit AnycallRequest(
+            ANYCALL_CONTRACT_RINKEBY,
+            RECEIVER_CONTRACT_FANTOM,
+            abi.encode(_msg),
+            address(0),
+            4002,
+            0
+        );
+
         callProxy.anyCall(
             RECEIVER_CONTRACT_FANTOM,
             abi.encode(_msg),
@@ -47,5 +77,20 @@ contract AnycallV6SenderEthereumRinkeby {
             4002, // Fantom testnet chain ID
             0 // Fee paid on destination chain (Fantom)
         );
+    }
+
+    function anyFallback(address to, bytes calldata data) external {
+        // require(msg.sender == address(this), "AnycallClient: Must call from within this contract");
+        // require(bytes4(data[:4]) == this.anyExecute.selector, "AnycallClient: wrong fallback data");
+
+        address executor = CallProxy(ANYCALL_CONTRACT_RINKEBY).executor();
+        (address _from, , ) = IAnycallExecutor(executor).context();
+        // require(_from == address(this), "AnycallClient: wrong context");
+
+        string memory message = abi.decode(data[4:], (string));
+
+        // require(peeraddress == to, "AnycallClient: mismatch dest client");
+
+        emit Fallbackmsg(message);
     }
 }

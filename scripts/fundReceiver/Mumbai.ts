@@ -1,5 +1,5 @@
 import { ethers, getNamedAccounts } from "hardhat"
-import { AnycallV6ReceiverFantom } from "../typechain-types"
+import { AnycallV6ReceiverPolygon } from "../../typechain-types"
 
 type EthersError = {
     reason: unknown
@@ -11,13 +11,16 @@ type EthersError = {
 
 async function main() {
     const { deployer } = await getNamedAccounts()
-    const AnycallV6ReceiverFantom: AnycallV6ReceiverFantom =
-        await ethers.getContract("AnycallV6ReceiverFantom", deployer)
-    console.log("address: ", AnycallV6ReceiverFantom.address)
+
+    // Note the Mumbai contract is just the Polygon contract deployed to the testnet
+    const AnycallV6ReceiverMumbai: AnycallV6ReceiverPolygon =
+        await ethers.getContract("AnycallV6ReceiverPolygon", deployer)
+
+    console.log("address: ", AnycallV6ReceiverMumbai.address)
 
     console.log("Calling deposit...")
-    const txResponse = await AnycallV6ReceiverFantom.deposit({
-        value: ethers.utils.parseEther("5"),
+    const txResponse = await AnycallV6ReceiverMumbai.deposit({
+        value: ethers.utils.parseEther("0.1"),
     })
     console.log("Deposit request sent...")
     try {

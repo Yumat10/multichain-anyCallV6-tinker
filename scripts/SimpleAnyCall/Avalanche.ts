@@ -1,5 +1,5 @@
 import { ethers, getNamedAccounts } from "hardhat"
-import { AnycallV6SenderEthereumRinkeby } from "../typechain-types"
+import { AnycallV6SenderAvalanche } from "../../typechain-types/live/AnycallV6SenderAvalanche.sol/AnycallV6SenderAvalanche"
 
 type EthersError = {
     reason: unknown
@@ -11,23 +11,17 @@ type EthersError = {
 
 async function main() {
     const { deployer } = await getNamedAccounts()
-    const AnycallV6SenderEthereumRinkeby: AnycallV6SenderEthereumRinkeby =
-        await ethers.getContract("AnycallV6SenderEthereumRinkeby", deployer)
-    console.log("address: ", AnycallV6SenderEthereumRinkeby.address)
-
-    const temp = (await AnycallV6SenderEthereumRinkeby.TEMP()).toString()
-
-    console.log("temp is: ", temp)
+    const AnycallV6SenderAvalanche: AnycallV6SenderAvalanche =
+        await ethers.getContract("AnycallV6SenderAvalanche", deployer)
+    console.log("Signer: ", deployer)
+    console.log("Contract address: ", AnycallV6SenderAvalanche.address)
 
     console.log("Calling initiateAnycallSimple...")
-    const msg = "Hello Wordl from Rinkeby"
-    // const gas = ethers.utils.parseUnits("0.001", "ether")
-    // console.log("Fee sent: ", gas.toString())
-    const txResponse =
-        await AnycallV6SenderEthereumRinkeby.initiateAnycallSimple(msg)
+    const msg = "Hello Wordl from Avalanche"
+    const txResponse = await AnycallV6SenderAvalanche.initiateAnycallSimple(msg)
     console.log("Anycall request sent...")
     try {
-        await txResponse.wait(1)
+        await txResponse.wait(3)
         console.log("Msg confirmed!")
     } catch (err) {
         const error = err as EthersError

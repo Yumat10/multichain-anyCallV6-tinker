@@ -1,8 +1,8 @@
 import { ethers } from "hardhat"
 import { DeployFunction } from "hardhat-deploy/dist/types"
 import { HardhatRuntimeEnvironment } from "hardhat/types"
-import { developmentChains } from "../helper-hardhat-config"
-import verify from "../utils/verify"
+import { developmentChains } from "../../helper-hardhat-config"
+import verify from "../../utils/verify"
 
 const deployAnycallV6SenderEthereumRinkeby: DeployFunction = async function (
     hre: HardhatRuntimeEnvironment
@@ -22,7 +22,7 @@ const deployAnycallV6SenderEthereumRinkeby: DeployFunction = async function (
     const args = [
         "0x273a4fFcEb31B8473D51051Ad2a2EdbB7Ac8Ce02", // Multichain Anycall Rinkeby contract address
         // "0xD7c295E399CA928A3a14b01D760E794f1AdF8990", // Multichain Anycall Fantom contract address
-        "0x575D536b97987fD173259264dD539E618d8529E9", // Fantom receiver address
+        "0x371b039D798D17cCe6B0c0C5B9Ed0E0a70d6aB2C", // Fantom receiver address
     ]
     const AnycallV6SenderEthereumRinkeby = await deploy(
         "AnycallV6SenderEthereumRinkeby",

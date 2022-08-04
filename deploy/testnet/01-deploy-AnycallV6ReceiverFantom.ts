@@ -17,6 +17,8 @@ const deployAnycallV6ReceiverFantom: DeployFunction = async function (
         return
     }
 
+    log("deployer: ", deployer)
+
     log("Deploying Fantom receiver...")
     const AnycallV6ReceiverFantom = await deploy("AnycallV6ReceiverFantom", {
         from: deployer,
